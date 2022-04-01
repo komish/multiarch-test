@@ -21,6 +21,7 @@ jobs:
       id: build-images
       uses: redhat-actions/buildah-build@v2 
       with:
+        arch: amd64,ppc64le
         image: my-new-image
         tags: ${{ github.sha }}
         containerfiles: |
