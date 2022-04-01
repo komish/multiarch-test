@@ -1,7 +1,9 @@
 name: 'Build and publish images for multiple architectures'
 
 on:
-  workflow_dispatch:
+  push:
+    branch:
+    - master
 
 jobs:
   multiarch:
