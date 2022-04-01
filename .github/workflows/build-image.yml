@@ -5,6 +5,8 @@ on:
     branches:
       - master
 
+env:
+  IMAGE_NAME: multiarch-test
 jobs:
   multiarch:
     runs-on: ubuntu-latest
@@ -22,7 +24,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2 
       with:
         archs: amd64, ppc64le
-        image: multiarch-test
+        image: ${{ env.IMAGE_NAME }}
         tags: ${{ github.sha }}
         containerfiles: |
           ./Dockerfile
@@ -30,13 +32,13 @@ jobs:
     - name: List images
       run: |
         buildah images
-        buildah manifest inspect localhost/my-new-image:${{ github.sha }}
+        buildah manifest inspect localhost/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
     - name: Push to target push registry.
       id: push-to-registry
       uses: redhat-actions/push-to-registry@v2
       with:
-        image: multiarch-test
+        image: ${{ env.IMAGE_NAME }}
         tags: ${{ github.sha }}
         registry: quay.io/${{ secrets.REGISTRY_REPOSITORY }}
         username: ${{ secrets.REGISTRY_USER }}
