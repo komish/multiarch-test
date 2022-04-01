@@ -23,6 +23,10 @@ jobs:
         tags: ${{ github.sha }}
         containerfiles: |
           ./Dockerfile
+    
+    - name: List images
+      run: |
+        buildah images
 
       # - name: Push to target push registry.
       #   id: push-to-registry
