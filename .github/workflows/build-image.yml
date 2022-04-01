@@ -29,7 +29,7 @@ jobs:
     - name: List images
       run: |
         buildah images
-        buildah manifest inspect localhost/my-new-image
+        buildah inspect localhost/my-new-image:${{ github.sha }}
 
       # - name: Push to target push registry.
       #   id: push-to-registry
