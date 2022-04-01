@@ -1,0 +1,7 @@
+FROM registry.access.redhat.com/ubi8/ubi-micro
+ARG BIN_ARCH
+WORKDIR /
+COPY multiarch-test_${BIN_ARCH} /multiarch-test
+USER 65532:65532
+
+ENTRYPOINT ["/multiarch-test"]
