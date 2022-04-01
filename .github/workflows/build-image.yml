@@ -6,16 +6,20 @@ on:
       - master
 
 jobs:
-  multiarch:
+  prepare:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
     - name: Set up QEMU static binaries for multiple architectures.
       uses: docker/setup-qemu-action@master
       with:
         platforms: amd64,ppc64le
+        
+  multiarch:
+    needs: [prepare]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Build images for multiple architectures
       id: build-images
