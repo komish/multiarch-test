@@ -27,6 +27,7 @@ jobs:
     - name: List images
       run: |
         buildah images
+        buildah image inspect localhost/my-new-image
 
       # - name: Push to target push registry.
       #   id: push-to-registry
