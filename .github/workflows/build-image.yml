@@ -6,27 +6,23 @@ on:
       - master
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Set up QEMU static binaries for multiple architectures.
-      uses: docker/setup-qemu-action@master
-      with:
-        platforms: amd64,ppc64le
-        
   multiarch:
-    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
+    - name: Set up QEMU static binaries for multiple architectures.
+      uses: docker/setup-qemu-action@master
+      with:
+        platforms: amd64,ppc64le
 
     - name: Build images for multiple architectures
       id: build-images
       uses: redhat-actions/buildah-build@v2 
       with:
         archs: amd64, ppc64le
-        image: my-new-image
+        image: multiarch-test
         tags: ${{ github.sha }}
         containerfiles: |
           ./Dockerfile
@@ -36,12 +32,12 @@ jobs:
         buildah images
         buildah inspect localhost/my-new-image:${{ github.sha }}
 
-      # - name: Push to target push registry.
-      #   id: push-to-registry
-      #   uses: redhat-actions/push-to-registry@v2
-      #   with:
-      #     image: ${{ steps.build-images.outputs.image }}
-      #     tags: ${{ steps.build-images.outputs.tags }}
-      #     registry: quay.io #quay.io/quay-user
-      #     username: ${{ secrets.REGISTRY_USER}}
-      #     password: ${{ secrets.REGISTRY_PASSWORD }}
+    - name: Push to target push registry.
+      id: push-to-registry
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: multiarch-test
+        tags: ${{ github.sha }}
+        registry: quay.io/${{ secrets.REGISTRY_REPOSITORY }}
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
