@@ -41,5 +41,5 @@ jobs:
         image: ${{ env.IMAGE_NAME }}
         tags: ${{ github.sha }}
         registry: quay.io/${{ secrets.REGISTRY_REPOSITORY }}
-        username: ${{ secrets.REGISTRY_USER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
