@@ -7,6 +7,7 @@ on:
 
 env:
   IMAGE_NAME: multiarch-test
+  TARGET_ARCHS: amd64,ppc64le
 jobs:
   multiarch:
     runs-on: ubuntu-latest
@@ -17,21 +18,20 @@ jobs:
     - name: Set up QEMU static binaries for multiple architectures.
       uses: docker/setup-qemu-action@master
       with:
-        platforms: amd64,ppc64le
+        platforms: ${{ env.TARGET_ARCHS }}
 
     - name: Build images for multiple architectures
       id: build-images
       uses: redhat-actions/buildah-build@v2 
       with:
-        archs: amd64, ppc64le
+        archs: ${{ env.TARGET_ARCHS }}
         image: ${{ env.IMAGE_NAME }}
         tags: ${{ github.sha }}
         containerfiles: |
           ./Dockerfile
     
-    - name: List images
+    - name: Ensure manifest was built.
       run: |
-        buildah images
         buildah manifest inspect localhost/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
     - name: Push to target push registry.
