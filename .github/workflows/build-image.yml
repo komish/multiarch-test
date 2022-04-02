@@ -41,7 +41,7 @@ jobs:
     
     - name: Ensure manifest was built.
       run: |
-        buildah manifest inspect localhost/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        buildah manifest inspect localhost/${{ env.IMAGE_NAME }}:${{ env.RELEASE_TAG }}
 
     - name: Push to target push registry.
       id: push-to-registry
